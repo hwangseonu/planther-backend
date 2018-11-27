@@ -1,9 +1,8 @@
-package me.mocha.calendar.request;
+package me.mocha.calendar.user.request;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 @Data
