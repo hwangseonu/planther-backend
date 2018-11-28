@@ -1,0 +1,7 @@
+jwt:
+  secret: "my-secret"
+
+  access:
+    expiration: 604800000
+  refresh:
+    expiration: 2592000000
