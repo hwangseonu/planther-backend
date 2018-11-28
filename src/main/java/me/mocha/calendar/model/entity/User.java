@@ -31,4 +31,8 @@ public class User {
         return String.format("%d%02d%02d", grade, cls, number);
     }
 
+    public String getClassID() {
+        return String.format("%d%02d", grade, cls);
+    }
+
 }
