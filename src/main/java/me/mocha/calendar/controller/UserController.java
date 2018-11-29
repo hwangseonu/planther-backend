@@ -4,7 +4,7 @@ import me.mocha.calendar.exception.ConflictException;
 import me.mocha.calendar.model.entity.User;
 import me.mocha.calendar.model.repository.UserRepository;
 import me.mocha.calendar.payload.request.user.SignUpRequest;
-import me.mocha.calendar.security.CurrentUser;
+import me.mocha.calendar.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;

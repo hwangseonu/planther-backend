@@ -1,9 +1,11 @@
-package me.mocha.calendar.security;
+package me.mocha.calendar.resolver;
 
 import lombok.extern.slf4j.Slf4j;
+import me.mocha.calendar.annotation.CurrentUser;
 import me.mocha.calendar.exception.NotFoundException;
 import me.mocha.calendar.model.entity.User;
 import me.mocha.calendar.model.repository.UserRepository;
+import me.mocha.calendar.security.UserPrincipal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.context.SecurityContextHolder;

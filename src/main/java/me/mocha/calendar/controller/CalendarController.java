@@ -5,13 +5,11 @@ import me.mocha.calendar.model.entity.Calendar;
 import me.mocha.calendar.model.entity.User;
 import me.mocha.calendar.model.repository.CalendarRepository;
 import me.mocha.calendar.payload.request.Calendar.AddCalendarRequest;
-import me.mocha.calendar.security.CurrentUser;
+import me.mocha.calendar.annotation.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
