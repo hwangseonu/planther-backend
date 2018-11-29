@@ -1,11 +1,18 @@
 package me.mocha.calendar.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 
 @Data
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class Calendar {
 
@@ -42,5 +49,12 @@ public class Calendar {
 
     @Enumerated(EnumType.STRING)
     private Type type;
+
+    private String classId;
+
+    @JsonIgnore
+    private LocalDate getDate() {
+        return LocalDate.of(year, month, day);
+    }
 
 }
