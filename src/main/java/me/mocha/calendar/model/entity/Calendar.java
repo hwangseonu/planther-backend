@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDate;
 
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
+@NoArgsConstructor
+@Builder
+@AllArgsConstructor
+@Data
 public class Calendar {
 
     public enum Type {
