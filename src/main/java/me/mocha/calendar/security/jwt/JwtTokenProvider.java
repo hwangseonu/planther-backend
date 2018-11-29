@@ -5,6 +5,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,14 +16,17 @@ import java.util.UUID;
 @Slf4j
 public class JwtTokenProvider {
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private String secret = System.getenv("JWT_SECRET");
 
     @Value("${jwt.access.expiration}")
     private long accessExpiration;
 
     @Value("${jwt.refresh.expiration}")
     private long refreshExpiration;
+
+    public JwtTokenProvider() {
+        if (!StringUtils.hasText(secret)) secret = "my-secret";
+    }
 
     public String generateToken(String username, JwtType type) {
         return Jwts.builder()
