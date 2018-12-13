@@ -1,11 +1,13 @@
 package me.mocha.calendar.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import me.mocha.calendar.exception.NotFoundException;
 import me.mocha.calendar.model.entity.Calendar;
 import me.mocha.calendar.model.entity.User;
 import me.mocha.calendar.model.repository.CalendarRepository;
 import me.mocha.calendar.payload.request.Calendar.AddCalendarRequest;
 import me.mocha.calendar.annotation.CurrentUser;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,6 +42,13 @@ public class CalendarController {
                 .build());
     }
 
+    @DeleteMapping("/{id}")
+    public void deleteCalendar(@PathVariable("id") int id) {
+        if (!calendarRepository.existsById(id)) {
+            throw new NotFoundException("Could not find calendar");
+        }
+        calendarRepository.deleteById(id);
+    }
     @GetMapping("/{year}")
     public Map<Integer, Map<Integer, List<Calendar>>> getYearCalendar(@CurrentUser User user, @PathVariable("year") int year) {
         Map<Integer, Map<Integer, List<Calendar>>> yearCalendar = new HashMap<>();
