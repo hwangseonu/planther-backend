@@ -2,6 +2,7 @@ package me.mocha.planther.common.security.jwt;
 
 import lombok.extern.slf4j.Slf4j;
 import me.mocha.planther.common.exception.NotFoundException;
+import me.mocha.planther.common.exception.UnprocessableEntityException;
 import me.mocha.planther.common.model.repository.UserRepository;
 import me.mocha.planther.common.security.user.UserDetailsServiceImpl;
 import org.springframework.http.HttpRequest;
@@ -36,15 +37,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException, ServletException {
         try {
             String token = getTokenFromRequestHeader(request);
-            if (StringUtils.hasText(token) && jwtProvider.validToken(token, JwtType.ACCESS)) {
-                String username = jwtProvider.getUsernameFromToken(token);
-                if (!userRepository.existsById(username)) {
-                    throw new NotFoundException("존재하지 않는 사용자입니다.");
+            if (StringUtils.hasText(token)) {
+                if (jwtProvider.validToken(token, JwtType.ACCESS)) {
+                    String username = jwtProvider.getUsernameFromToken(token);
+                    if (!userRepository.existsById(username)) {
+                        throw new NotFoundException("존재하지 않는 사용자입니다.");
+                    }
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                } else {
+                    throw new UnprocessableEntityException("unprocessable token");
                 }
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {
             log.error("Could not set user authentication is security context - {}", e.getMessage());
