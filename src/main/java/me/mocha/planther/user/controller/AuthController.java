@@ -39,6 +39,7 @@ public class AuthController {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new UnauthorizedException("비밀번호가 맞지 않습니다.");
         }
+        log.info("{} is authenticated", user.getUsername());
         return new SignInResponse(
                 jwtProvider.generateToken(user.getUsername(), JwtType.ACCESS),
                 jwtProvider.generateToken(user.getUsername(), JwtType.REFRESH));
@@ -55,6 +56,7 @@ public class AuthController {
                     if (ChronoUnit.DAYS.between(LocalDate.now(), jwtProvider.getExpiration(token)) <= 7) {
                         response.setRefresh(jwtProvider.generateToken(username, JwtType.REFRESH));
                     }
+                    log.info("refresh token of {}", username);
                     return response;
                 }
             }
