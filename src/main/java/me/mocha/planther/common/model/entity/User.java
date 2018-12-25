@@ -1,5 +1,7 @@
 package me.mocha.planther.common.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 
@@ -18,6 +20,7 @@ public class User {
     @Size(min = 4)
     private String username;
 
+    @JsonIgnore
     @Size(min = 8)
     private String password;
 
@@ -30,7 +33,7 @@ public class User {
     @Range(min = 1, max = 20)
     private int number;
 
-    private String studentID() {
+    public String studentID() {
         return String.format("%d%02d%02d", grade, cls, number);
     }
 
