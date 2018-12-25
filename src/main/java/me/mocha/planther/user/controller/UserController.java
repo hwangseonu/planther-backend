@@ -35,7 +35,8 @@ public class UserController {
                 .cls(request.getCls())
                 .number(request.getNumber())
                 .build();
-        if (userRepository.existsByUsernameOrName(user.getUsername(), user.getName()) || userRepository.existsByGradeAndClsAndNumber(user.getGrade(), user.getCls(), user.getNumber())) {
+        if (userRepository.existsByUsernameOrName(user.getUsername(), user.getName())
+                || userRepository.existsByGradeAndClsAndNumber(user.getGrade(), user.getCls(), user.getNumber())) {
             throw new ConflictException("이미 존재하는 사용자정보입니다.");
         }
         user = userRepository.save(user);
