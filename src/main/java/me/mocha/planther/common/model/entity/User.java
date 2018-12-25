@@ -33,6 +33,9 @@ public class User {
     @Range(min = 1, max = 20)
     private int number;
 
+    @JsonIgnore
+    private String role;
+
     public String studentID() {
         return String.format("%d%02d%02d", grade, cls, number);
     }
