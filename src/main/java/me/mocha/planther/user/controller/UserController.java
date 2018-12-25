@@ -1,6 +1,7 @@
 package me.mocha.planther.user.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import me.mocha.planther.common.exception.ConflictException;
 import me.mocha.planther.common.model.entity.User;
 import me.mocha.planther.common.model.repository.UserRepository;
 import me.mocha.planther.user.request.SignUpRequest;
@@ -26,14 +27,18 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User signUp(@Valid @RequestBody SignUpRequest request) {
-        User user = userRepository.save(User.builder()
+        User user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .grade(request.getGrade())
                 .cls(request.getCls())
                 .number(request.getNumber())
-                .build());
+                .build();
+        if (userRepository.existsByUsernameOrNameOrStudentID(user.getUsername(), user.getName(), user.getStudentID())) {
+            throw new ConflictException("이미 존재하는 사용자정보입니다.");
+        }
+        user = userRepository.save(user);
         log.info("signed up {}", user.getUsername());
         return user;
     }

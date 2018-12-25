@@ -39,7 +39,7 @@ public class User {
     @JsonIgnore
     private String role;
 
-    public String studentID() {
+    public String getStudentID() {
         return String.format("%d%02d%02d", grade, cls, number);
     }
 
