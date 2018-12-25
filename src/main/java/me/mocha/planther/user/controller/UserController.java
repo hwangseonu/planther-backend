@@ -5,6 +5,7 @@ import me.mocha.planther.common.model.entity.User;
 import me.mocha.planther.common.model.repository.UserRepository;
 import me.mocha.planther.user.request.SignUpRequest;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -15,9 +16,11 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping
@@ -25,7 +28,7 @@ public class UserController {
     public User signUp(@Valid @RequestBody SignUpRequest request) {
         User user = userRepository.save(User.builder()
                 .username(request.getUsername())
-                .password(request.getPassword())
+                .password(passwordEncoder.encode(request.getPassword()))
                 .name(request.getName())
                 .grade(request.getGrade())
                 .cls(request.getCls())
