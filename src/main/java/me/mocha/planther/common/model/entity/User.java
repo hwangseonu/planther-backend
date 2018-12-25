@@ -24,6 +24,9 @@ public class User {
     @Size(min = 8)
     private String password;
 
+    @Size(min = 2, max = 5)
+    private String name;
+
     @Range(min = 1, max = 3)
     private int grade;
 

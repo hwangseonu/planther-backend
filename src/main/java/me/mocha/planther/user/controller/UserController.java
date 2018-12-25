@@ -23,13 +23,16 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User signUp(@Valid @RequestBody SignUpRequest request) {
-        return userRepository.save(User.builder()
+        User user = userRepository.save(User.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())
+                .name(request.getName())
                 .grade(request.getGrade())
                 .cls(request.getCls())
                 .number(request.getNumber())
                 .build());
+        log.info("signed up {}", user.getUsername());
+        return user;
     }
 
 }
