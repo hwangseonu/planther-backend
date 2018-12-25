@@ -1,6 +1,7 @@
 package me.mocha.planther.user.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import me.mocha.planther.common.annotation.CurrentUser;
 import me.mocha.planther.common.exception.ConflictException;
 import me.mocha.planther.common.model.entity.User;
 import me.mocha.planther.common.model.repository.UserRepository;
@@ -41,6 +42,11 @@ public class UserController {
         }
         user = userRepository.save(user);
         log.info("signed up {}", user.getUsername());
+        return user;
+    }
+
+    @GetMapping
+    public User info(@CurrentUser User user) {
         return user;
     }
 
