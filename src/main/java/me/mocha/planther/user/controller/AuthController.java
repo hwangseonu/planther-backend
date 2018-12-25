@@ -1,6 +1,7 @@
 package me.mocha.planther.user.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import me.mocha.planther.common.exception.BadRequestException;
 import me.mocha.planther.common.exception.NotFoundException;
 import me.mocha.planther.common.exception.UnauthorizedException;
 import me.mocha.planther.common.model.entity.User;
@@ -10,12 +11,12 @@ import me.mocha.planther.common.security.jwt.JwtType;
 import me.mocha.planther.user.request.SignInRequest;
 import me.mocha.planther.user.response.SignInResponse;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @RestController
 @RequestMapping("/auth")
@@ -41,6 +42,24 @@ public class AuthController {
         return new SignInResponse(
                 jwtProvider.generateToken(user.getUsername(), JwtType.ACCESS),
                 jwtProvider.generateToken(user.getUsername(), JwtType.REFRESH));
+    }
+
+    @GetMapping("/refresh")
+    public SignInResponse refresh(@RequestHeader("Authorization") String header) {
+        if (header.startsWith("Bearer")) {
+            String token = header.replaceFirst("Bearer", "").trim();
+            if (StringUtils.hasText(token) && jwtProvider.validToken(token, JwtType.REFRESH)) {
+                String username = jwtProvider.getUsernameFromToken(token);
+                if (userRepository.existsById(username)) {
+                    SignInResponse response = new SignInResponse(jwtProvider.generateToken(username, JwtType.ACCESS), null);
+                    if (ChronoUnit.DAYS.between(LocalDate.now(), jwtProvider.getExpiration(token)) <= 7) {
+                        response.setRefresh(jwtProvider.generateToken(username, JwtType.REFRESH));
+                    }
+                    return response;
+                }
+            }
+        }
+        throw new BadRequestException("refresh token 이 필요합니다.");
     }
 
 }
