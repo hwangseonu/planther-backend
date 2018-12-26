@@ -7,6 +7,7 @@ import me.mocha.planther.common.model.entity.User;
 import me.mocha.planther.plan.model.entity.Plan;
 import me.mocha.planther.plan.model.repository.PlanRepository;
 import me.mocha.planther.plan.request.AddPlanRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ public class PlanController {
     }
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public Plan addPlan(@CurrentUser User user, @Valid @RequestBody AddPlanRequest request) {
         Plan plan = planRepository.save(Plan.builder()
                 .title(request.getTitle())

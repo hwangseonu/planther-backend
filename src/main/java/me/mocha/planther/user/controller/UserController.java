@@ -35,6 +35,7 @@ public class UserController {
                 .grade(request.getGrade())
                 .cls(request.getCls())
                 .number(request.getNumber())
+                .role("ROLE_USER")
                 .build();
         if (userRepository.existsByUsernameOrName(user.getUsername(), user.getName())
                 || userRepository.existsByGradeAndClsAndNumber(user.getGrade(), user.getCls(), user.getNumber())) {

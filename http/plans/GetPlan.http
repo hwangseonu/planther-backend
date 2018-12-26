@@ -1,0 +1,5 @@
+GET http://localhost:8080/plans/2018/12/26/1
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhY2Nlc3MiLCJleHAiOjE1NDU4MDQ3MTQsImlhdCI6MTU0NTc5ODMxNCwibmJmIjoxNTQ1Nzk4MzE0LCJqdGkiOiIxNGUzZDg3Mi0wMjExLTRlOGQtOWU3NC02NjRmOWNlMjdjOWQiLCJ1c2VybmFtZSI6InRlc3QifQ.eZu3Pu8x7rcCnZ0fkT16A76eO94n5IWq6jzUbrWntcta8NlXKZsh7nTwmWz3X6Cr_b__G31G2qTDvUXQnYd9Qg
+Content-Type: application/json
+
+###
