@@ -37,7 +37,7 @@ public class Plan {
 
     private int day;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne
     private User user;
 
     private String classId;
