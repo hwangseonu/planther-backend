@@ -10,6 +10,7 @@ import me.mocha.planther.plan.request.AddPlanRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/plans")
@@ -24,7 +25,7 @@ public class PlanController {
 
     @PostMapping
     public Plan addPlan(@CurrentUser User user, @Valid @RequestBody AddPlanRequest request) {
-        return planRepository.save(Plan.builder()
+        Plan plan = planRepository.save(Plan.builder()
                 .title(request.getTitle())
                 .content(request.getContent())
                 .type(Plan.Type.valueOf(request.getType()))
@@ -34,6 +35,8 @@ public class PlanController {
                 .user(user)
                 .classId(user.getClassId())
                 .build());
+        log.info("plan {} added", plan.getId());
+        return plan;
     }
 
     @DeleteMapping("/{id}")
@@ -42,6 +45,21 @@ public class PlanController {
             throw new NotFoundException("존재하지 않는 계획입니다.");
         }
         planRepository.deleteById(id);
+    }
+
+    @GetMapping("/{year}/{month}/{day}/{id}")
+    public Plan getPlan(@PathVariable("year") int year,
+                        @PathVariable("month") int month,
+                        @PathVariable("day") int day,
+                        @PathVariable("id") long id) {
+        return planRepository.findByYearAndMonthAndDayAndId(year, month, day, id).orElseThrow(() -> new NotFoundException("존재하지 않는 계획힙니다."));
+    }
+
+    @GetMapping("/{year}/{month}/{day}")
+    public List<Plan> getDayPlans(@PathVariable("year") int year,
+                                  @PathVariable("month") int month,
+                                  @PathVariable("day") int day) {
+        return planRepository.findAllByYearAndMonthAndDay(year, month, day);
     }
 
 }
