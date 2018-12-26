@@ -48,18 +48,23 @@ public class PlanController {
     }
 
     @GetMapping("/{year}/{month}/{day}/{id}")
-    public Plan getPlan(@PathVariable("year") int year,
-                        @PathVariable("month") int month,
-                        @PathVariable("day") int day,
-                        @PathVariable("id") long id) {
-        return planRepository.findByYearAndMonthAndDayAndId(year, month, day, id).orElseThrow(() -> new NotFoundException("존재하지 않는 계획힙니다."));
+    public Plan getPlan(
+            @CurrentUser User user,
+            @PathVariable("year") int year,
+            @PathVariable("month") int month,
+            @PathVariable("day") int day,
+            @PathVariable("id") long id) {
+        return planRepository.findByClassIdAndYearAndMonthAndDayAndId(
+                user.getClassId(), year, month, day, id).orElseThrow(() -> new NotFoundException("존재하지 않는 계획힙니다."));
     }
 
     @GetMapping("/{year}/{month}/{day}")
-    public List<Plan> getDayPlans(@PathVariable("year") int year,
-                                  @PathVariable("month") int month,
-                                  @PathVariable("day") int day) {
-        return planRepository.findAllByYearAndMonthAndDay(year, month, day);
+    public List<Plan> getDayPlans(
+            @CurrentUser User user,
+            @PathVariable("year") int year,
+            @PathVariable("month") int month,
+            @PathVariable("day") int day) {
+        return planRepository.findAllByClassIdAndYearAndMonthAndDay(user.getClassId(), year, month, day);
     }
 
 }

@@ -7,6 +7,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PlanRepository extends JpaRepository<Plan, Long> {
-    Optional<Plan> findByYearAndMonthAndDayAndId(int year, int month, int day, long id);
-    List<Plan> findAllByYearAndMonthAndDay(int year, int month, int day);
+    Optional<Plan> findByClassIdAndYearAndMonthAndDayAndId(String classId, int year, int month, int day, long id);
+    List<Plan> findAllByClassIdAndYearAndMonthAndDay(String classId, int year, int month, int day);
 }
