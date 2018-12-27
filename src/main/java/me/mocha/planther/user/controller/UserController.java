@@ -37,7 +37,7 @@ public class UserController {
                 .number(request.getNumber())
                 .role("ROLE_USER")
                 .build();
-        if (userRepository.existsByUsernameOrName(user.getUsername(), user.getName())
+        if (userRepository.existsById(user.getUsername())
                 || userRepository.existsByGradeAndClsAndNumber(user.getGrade(), user.getCls(), user.getNumber())) {
             throw new ConflictException("이미 존재하는 사용자정보입니다.");
         }
