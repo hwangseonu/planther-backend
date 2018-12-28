@@ -48,7 +48,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
-                    throw new UnprocessableEntityException("unprocessable token");
+                    response.sendError(422, "unprocessable token");
+                    return;
                 }
             }
         } catch (Exception e) {
