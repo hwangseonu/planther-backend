@@ -28,7 +28,7 @@ Plan Togerther API
 
 ### Authorization
 
-- Jwt (jjwt 0.9.1
+- Jwt (jjwt 0.9.1)
 
 ### Web Server
 
