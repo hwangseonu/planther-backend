@@ -41,19 +41,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 if (jwtProvider.validToken(token, JwtType.ACCESS)) {
                     String username = jwtProvider.getUsernameFromToken(token);
                     if (!userRepository.existsById(username)) {
-                        throw new NotFoundException("존재하지 않는 사용자입니다.");
+                        response.sendError(404);
+                        return;
                     }
                     UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                     UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                             userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authentication);
                 } else {
-                    response.sendError(422, "unprocessable token");
+                    response.sendError(422);
                     return;
                 }
             }
         } catch (Exception e) {
             log.error("Could not set user authentication is security context - {}", e.getMessage());
+            response.sendError(500);
+            return;
         }
         filterChain.doFilter(request, response);
     }
