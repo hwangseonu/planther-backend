@@ -16,7 +16,7 @@ Plan Togerther API
 
 ### Framework
 
-- Spring framework (Spring boot 2.1.1)
+- Spring framework (Spring boot 2.1.2)
 
 ### Database
 
