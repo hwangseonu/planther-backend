@@ -1,5 +1,0 @@
-jwt:
-  access:
-    exp: 6400000
-  refresh:
-    exp: 2592000000
