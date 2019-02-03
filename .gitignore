@@ -110,3 +110,5 @@ dependency-reduced-pom.xml
 buildNumber.properties
 
 # End of https://www.gitignore.io/api/java,maven,intellij+all
+
+**/application-dev.yml
