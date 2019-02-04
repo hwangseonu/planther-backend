@@ -30,18 +30,22 @@ public class PlanController {
 
     @PostMapping
     public ResponseEntity<Plan> newPlan(@CurrentUser User user, @Valid @RequestBody AddPlanRequest request) {
-        Plan plan = planRepository.save(Plan.builder()
-                .title(request.getTitle())
-                .content(request.getContent())
-                .type(Plan.Type.valueOf(request.getType()))
-                .year(request.getYear())
-                .month(request.getMonth())
-                .day(request.getDay())
-                .user(user)
-                .classId(user.getClassId())
-                .build());
-        log.info("plan {} added", plan.getId());
-        return ResponseEntity.status(HttpStatus.CREATED).body(plan);
+        try {
+            Plan plan = planRepository.save(Plan.builder()
+                    .title(request.getTitle())
+                    .content(request.getContent())
+                    .type(Plan.Type.valueOf(request.getType()))
+                    .year(request.getYear())
+                    .month(request.getMonth())
+                    .day(request.getDay())
+                    .user(user)
+                    .classId(user.getClassId())
+                    .build());
+            log.info("plan {} added", plan.getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(plan);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 }

@@ -1,0 +1,14 @@
+POST http://localhost:8080/plans
+Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhY2Nlc3MiLCJleHAiOjE1NDkyNjUzNjksImlhdCI6MTU0OTI1ODk2OSwibmJmIjoxNTQ5MjU4OTY5LCJqdGkiOiI1N2NkOWFmMy1hMjc5LTQ3ZGYtYjhlYS1jZGQ3YjRjMGQzNTkiLCJ1c2VybmFtZSI6InRlc3QifQ.5pIrTE2cyI1-HIobA05caAGDIn_zbk8yT90a_E97kwDy1bq-tNIzZ_Uq7lJTLN1pZE032a1G_oDQJIEtire-bA
+Content-Type: application/json
+
+{
+  "title": "test",
+  "content": "test",
+  "type": "events",
+  "year": 2018,
+  "month": 12,
+  "day": 26
+}
+
+###
