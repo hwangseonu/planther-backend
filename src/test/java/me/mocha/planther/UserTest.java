@@ -1,6 +1,8 @@
 package me.mocha.planther;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import me.mocha.planther.common.security.jwt.JwtProvider;
+import me.mocha.planther.common.security.jwt.JwtType;
 import me.mocha.planther.user.request.SignInRequest;
 import me.mocha.planther.user.request.SignUpRequest;
 import org.junit.FixMethodOrder;
@@ -15,6 +17,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -22,6 +26,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserTest {
+
+    @Autowired
+    private JwtProvider jwtProvider;
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +53,12 @@ public class UserTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated());
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.username").value("test"))
+                .andExpect(jsonPath("$.name").value("테스트"))
+                .andExpect(jsonPath("$.grade").value(1))
+                .andExpect(jsonPath("$.cls").value(1))
+                .andExpect(jsonPath("$.number").value(1));
     }
 
     @Test
@@ -67,6 +79,29 @@ public class UserTest {
                 .content(objectMapper.writeValueAsString(request))
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void test5GetUserNotFound() throws Exception {
+        String token = jwtProvider.generateToken("test1", JwtType.ACCESS);
+        mockMvc.perform(get("/users")
+                .header("Authorization", "Bearer " + token)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void test6GetUserSuccess() throws Exception {
+        String token = jwtProvider.generateToken("test", JwtType.ACCESS);
+        mockMvc.perform(get("/users")
+                .header("Authorization", "Bearer " + token)
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value("test"))
+                .andExpect(jsonPath("$.name").value("테스트"))
+                .andExpect(jsonPath("$.grade").value(1))
+                .andExpect(jsonPath("$.cls").value(1))
+                .andExpect(jsonPath("$.number").value(1));
     }
 
 }
