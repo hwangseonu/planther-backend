@@ -8,7 +8,6 @@ import me.mocha.planther.plan.model.repository.PlanRepository;
 import me.mocha.planther.plan.request.AddPlanRequest;
 import me.mocha.planther.plan.request.UpdatePlanRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
