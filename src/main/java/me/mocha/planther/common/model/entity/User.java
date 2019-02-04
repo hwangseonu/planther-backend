@@ -38,4 +38,9 @@ public class User {
         return String.format("%d%02d", grade, cls);
     }
 
+    public boolean equals(User user) {
+        if (user == null) return false;
+        return this.username.equals(user.username);
+    }
+
 }

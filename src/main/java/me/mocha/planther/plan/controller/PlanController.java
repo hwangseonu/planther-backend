@@ -6,15 +6,15 @@ import me.mocha.planther.common.model.entity.User;
 import me.mocha.planther.plan.model.entity.Plan;
 import me.mocha.planther.plan.model.repository.PlanRepository;
 import me.mocha.planther.plan.request.AddPlanRequest;
+import me.mocha.planther.plan.request.UpdatePlanRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/plans")
@@ -48,4 +48,40 @@ public class PlanController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Plan> getPlan(@CurrentUser User user, @PathVariable("id") long id) {
+        Plan plan = planRepository.findById(id).orElse(null);
+        if (plan == null) return ResponseEntity.notFound().build();
+        if (!plan.getClassId().equals(user.getClassId())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        return ResponseEntity.ok(plan);
+    }
+
+    @GetMapping("/{year}/{month}/{day}")
+    public ResponseEntity<List<Plan>> getDayPlan(@CurrentUser User user,
+                                                 @PathVariable("year") int year,
+                                                 @PathVariable("month") int month,
+                                                 @PathVariable("day") int day) {
+        List<Plan> plans = planRepository.findAllByClassIdAndYearAndMonthAndDay(user.getClassId(), year, month, day);
+        return ResponseEntity.ok(plans);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Plan> updatePlan(@CurrentUser User user, @Valid @RequestBody UpdatePlanRequest request, @PathVariable("id") long id) {
+        Plan plan = planRepository.findById(id).orElse(null);
+        if (plan == null) return ResponseEntity.notFound().build();
+        if (!plan.getUser().equals(user)) ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        plan.setTitle(request.getTitle());
+        plan.setContent(request.getContent());
+        plan = planRepository.save(plan);
+        return ResponseEntity.ok(plan);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deletePlan(@CurrentUser User user, @PathVariable("id") long id) {
+        Plan plan = planRepository.findById(id).orElse(null);
+        if (plan == null) return ResponseEntity.notFound().build();
+        if (!plan.getUser().equals(user)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        planRepository.deleteById(id);
+        return ResponseEntity.ok(null);
+    }
 }

@@ -1,14 +1,11 @@
-POST http://localhost:8080/plans
+PATCH http://localhost:8080/plans/1
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhY2Nlc3MiLCJleHAiOjE1NDkyOTY2MjEsImlhdCI6MTU0OTI5MDIyMSwibmJmIjoxNTQ5MjkwMjIxLCJqdGkiOiJmNTI4NDMxOS00ZGU2LTQzNjQtYjczOS1kNDM0NDI0NGQyMzAiLCJ1c2VybmFtZSI6InRlc3QifQ.zyzHG69Mfe1c-khfEI_lNvSEii6ZPQNhWlYffLJ5GYJFj9Rdfo4A-tMcdR4-LUC-pJ3woWzCPyrsyvSOCCcYeg
 Content-Type: application/json
 
 {
   "title": "test",
-  "content": "test",
-  "type": "event",
-  "year": 2019,
-  "month": 1,
-  "day": 1
+  "content": "test1234",
+  "type": "event"
 }
 
 ###
